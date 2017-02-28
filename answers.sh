@@ -61,7 +61,7 @@ Genome="$HOME/Genome_Class/rc-files/data-sets/genome/hg19.genome"
 
 CTCF_4="$HOME/Genome_Class/rc-files/data-sets/bedtools/ctcf.hela.chr22.bg.gz"
 
-answer_4=$(bedtools flank -i $TSS -g $Genome -l 1000 -r 0 > flanked.bed 
+answer_4=$(bedtools flank -i $TSS -g $Genome -l 1000 -r 0 -s > flanked.bed 
     bedtools sort -i flanked.bed > sorted.bed 
     bedtools map -c 4 -o median -a sorted.bed -b $CTCF_4 \
     | sort -k7nr \
@@ -78,27 +78,12 @@ echo "answer-4: $answer_4"
 hg19genes="$HOME/Genome_Class/rc-files/data-sets/bed/genes.hg19.bed"
 
 answer_5=$(bedtools complement -i $hg19genes -g $Genome \
-    | awk '($1="chr22") {print $0, $3-$2}' \
+    | awk '($1=="chr22") {print $0, $3-$2}' \
     | sort -k4nr \
     | head -n 1 \
     | awk '{print $1 ":" $2 "-" $3}')
 
 echo "answer-5: $answer_5"
-
-
-
-#6 EC. Use bedtools genomcov to see the coverage of h3k4me
-# sites on chr22 throughout hg19.genome
-
-# H3="$HOME/Genome_Class/rc-files/data-sets/bed/encode.h3k4me3.hela.chr22.bed.gz"
-
-# answer_6=$(bedtools sort -i $H3 > sortedH3.bed
- #   bedtools genomecov -i sortedH3.bed -g $hg19genes -bg \
-  #  | sort -k4nr \
-   # | head -n 20 )
-
-# echo "answer-6: $answer_6"
-
 
 
 
